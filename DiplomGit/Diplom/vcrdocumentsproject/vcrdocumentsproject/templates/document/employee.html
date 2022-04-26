@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование информации о сотруднике {{employee.fio}} {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:employee_save' employee.employee_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование информации о сотруднике</p>
+    <div class="item-select-wrapper"><p>Сотрудник: </p><input class="item-input" type="text" value="{{employee.fio}}" maxlength = "100" name="fio"> </div>
+
+    <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

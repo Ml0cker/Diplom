@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление сотрудника {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:employee_add' %}" method="POST">
+    {% csrf_token %}
+    <p class="title"> Добавление сотрудника</p>
+    <div class="item-select-wrapper"><p>Сотрудник: </p><input class="item-input" type="text" value="" maxlength = "100" name="fio"> </div>
+
+    <div class="button-wrapper"><button class="button-save" type="submit">Добавить</button></div>
+</form>
+</div>
+{% endblock %}

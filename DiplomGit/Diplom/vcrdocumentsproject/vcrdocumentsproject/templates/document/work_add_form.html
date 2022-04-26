@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавлние работы {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:work_add' %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Добавление работы</p>
+      <div class="item-select-wrapper"><p>По договору:</p>
+    <select class="item-select-short" name="contract_code">
+        <option disabled selected >Выберите договор</option>
+        {% for a in work_add_form.contracts %}
+        <option value="{{a.contract_code}}" >{{a.contract_number}}</option>
+        {% endfor %}
+    </select></div>
+    <div class="item-select-wrapper"><p>Вид работы:</p>
+    <select class="item-select-short" name="type_of_work">
+        <option disabled selected >Выберите вид работы</option>
+        <option value="Освидетельствование" >Освидетельствование</option>
+        <option value="Диагностирование" >Диагностирование</option>
+        <option value="Экспертиза" >Экспертиза</option>
+        <option value="Режимная наладка">Режимная наладка</option>
+        <option value="Пусковая наладка">Пусковая наладка</option>
+        <option value="Экспертиза">Экспертиза</option>
+        <option value="Прочее">Прочее</option>
+    </select></div>
+
+<div class="item-select-wrapper-big">
+    <div class="item-select-wrapper"><p>Выберите сотрудников:</p></div>
+    <select class="item-select" name="employee" multiple size="3">
+        {% if work_add_form.employees %}
+            {% for a in work_add_form.employees %}
+                    <option value="{{a.employee_code}}" >{{a.fio}}</option>
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+
+    </select>
+</div>
+
+    <div class="item-textarea-wrapper"><p>Наименование работы:</p><textarea type="text" value="" maxlength = "1000" name="description"></textarea></div>
+        <div class="item-select-wrapper"><p>Дата начала работы:</p><input class="item-input" type="datetime" value=""  name="work_start_date"></div>
+        <div class="item-select-wrapper"><p>Дата окончания работы:</p><input class="item-input" type="datetime" value="" name="work_end_date"> </div>
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Добавить</button></div>
+</form>
+</div>
+{% endblock %}

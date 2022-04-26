@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование работы {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:work_save' work.works.work_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование работы</p>
+      <div class="item-select-wrapper"><p>По договору:</p>
+    <select class="item-select-short" name="contract_code">
+        <option disabled >Выберите договор</option>
+        {% for a in work.contracts %}
+        <option value="{{a.contract_code}}" >{{a.contract_number}}</option>
+        {% endfor %}
+    </select></div>
+    <div class="item-select-wrapper"><p>Вид работы:</p>
+    <select class="item-select-short"  name="type_of_work"> {{w.type_of_work}}
+            <option value="" disabled>Выберите тип работы</option>
+            {% for a in work.work_type_const %}
+                {% if a == work.type_of_work %}
+                    <option value="{{a}}" selected>{{a}}</option>
+                {% else %}
+                    <option value="{{a}}" >{{a}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+<div class="item-select-wrapper-big">
+    <div class="item-select-wrapper"><p>Выберите сотрудников:</p></div>
+    <select class="item-select" name="employee" multiple size="3">
+
+        {% if work.employees %}
+        {% for a in work.employees %}
+                {% if a in work.works.employee_code.all %}
+                    <option value="{{a.employee_code}}" selected>{{a.fio}}</option>
+                {% else %}
+                   <option value="{{a.employee_code}}" >{{a.fio}}</option>
+                {% endif %}
+        {% endfor %}
+        {% else %}
+
+        {% endif %}
+
+    </select>
+</div>
+
+    <div class="item-textarea-wrapper"><p>Наименование работы:</p><textarea type="text" value="{{work.works.description}}" maxlength = "1000" name="description">{{work.works.description}}</textarea></div>
+        <div class="item-select-wrapper"><p>Дата начала работы:</p><input class="item-input" type="datetime" value="{{work.works.work_start_date|date:"Y-m-d"}}"  name="work_start_date"></div>
+        <div class="item-select-wrapper"><p>Дата окончания работы:</p><input class="item-input" type="datetime" value="{{work.works.work_end_date|date:"Y-m-d"}}" name="work_end_date"> </div>
+    <div class="item-select-wrapper"><p>Состояние работы:</p>
+    <select class="item-select-short" name="work_status">
+        <option disabled>Выберите статус</option>
+                {% if work.works.work_status == True %}
+                    <option value="True" selected >Выполнена</option>
+                    <option value="False" >Не выполнена</option>
+                {% else %}
+                    <option value="True" >Выполнена</option>
+                    <option value="False" selected>Не выполнена</option>
+                {% endif %}
+    </select>
+        </div>
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

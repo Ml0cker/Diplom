@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование договора {{contract.contract_number}} {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:contract_save' contract.contract_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование договора</p>
+<div class="filters">
+    <a class="filter" href="{% url 'contract:bill_list' contract.contract_code%}">Счета по договору</a>
+    <a class="filter" href="{% url 'contract:act_list' contract.contract_code%}">Акты по договору</a>
+</div>
+    <div class="item-select-wrapper"><p>Номер договора: </p><input class="item-input" type="text" value="{{contract.contract_number}}" maxlength = "20" name="contract_number"></div>
+    <div class="item-select-wrapper"><p>Заказчик:</p>
+    <select class="item-select" name="customer">
+        {% if contract.customer_l %}
+
+            {% for a in contract.customer_l %}
+                {% if a.customer_code == contract.customer.customer_code %}
+                    <option value="{{a.customer_code}}" selected>{{a.organization_name}}</option>
+                {% else %}
+                    <option value="{{a.customer_code}}" >{{a.organization_name}}</option>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+
+    </select></div>
+    <div class="item-select-wrapper"><p>Исполнитель:</p>
+    <select class="item-select" name="executor">
+        {% if contract.executor_l %}
+
+            {% for a in contract.executor_l %}
+                {% if a.executor_code == contract.executor.executor_code %}
+                    <option value="{{a.executor_code}}" selected>{{a.organization_name}}</option>
+                {% else %}
+                    <option value="{{a.executor_code}}" >{{a.organization_name}}</option>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+
+    </select></div>
+    <div class="item-textarea-wrapper"><p>Наименование договора:</p><textarea type="text" maxlength = "1000" name="description">{{contract.description}}</textarea></div>
+    <div class="item-select-wrapper"><p>Дата заключения договора:</p> <input class="item-input" type="datetime" value="{{contract.contract_date|date:"Y-m-d" }}"  name="contract_date"></div>
+    <div class="item-select-wrapper"><p>Дата окончания действия:</p> <input class="item-input" type="datetime" value="{{contract.contract_end_date|date:"Y-m-d"}}" name="contract_end_date"></div>
+        <div class="item-select-wrapper"><p>Cумма:</p><input class="item-input" type="text" value="{{contract.price}}" step="0.01" maxlength = "20" name="price"> </div>
+     <div class="item-select-wrapper"><p>НДС:</p><select class="item-select-short" name="nds">
+        <option disabled selected >Выберите НДС</option>
+        {% for a in contract.nds_const %}
+        {% if contract.nds == a%}
+        <option value="{{a}}" selected>{{a}}%</option>
+        {% else %}
+        <option value="{{a}}">{{a}}%</option>
+        {% endif %}
+        {% endfor %}
+
+     </select></div>
+        <div class="item-select-wrapper"><p>Cумма с НДС:</p><input class="item-input" type="text"  step="0.01"  maxlength = "20" value="{{contract.price_with_nds}}" name="price_with_nds"></div>
+     <div class="item-select-wrapper"><p>Оплата по договору:</p>
+    <select class="item-select-short" name="payment">
+
+        {% if contract.payment == True %}
+        <option disabled  >Выберите статус</option>
+        <option value="True" selected>Оплачен</option>
+        <option value="False">Не оплачен</option>
+        {% elif contract.payment == False  %}
+        <option disabled >Выберите статус</option>
+        <option value="True" >Оплачен</option>
+        <option value="False" selected>Не оплачен</option>
+        {% else %}
+        <option disabled selected >Выберите статус</option>
+        <option value="True" >Оплачен</option>
+        <option value="False" >Не оплачен</option>
+        {% endif %}
+    </select>
+     </div>
+    {% if contract.works %}
+    <p class="title">Работы по договору:</p>
+        {% for w in contract.works %}
+    <div class="contract-work">
+        <div class="item-select-wrapper"><p>Вид работы:</p>
+        <div><select class="item-select-short"  name="type_of_work"> {{w.type_of_work}}
+            <option value="" disabled>Выберите тип работы</option>
+            {% for a in contract.work_type_const %}
+                {% if a == w.type_of_work %}
+                    <option value="{{a}}" selected>{{a}}</option>
+                {% else %}
+                    <option value="{{a}}" >{{a}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>   </div>
+            </div>
+    <div class="item-textarea-wrapper"><p>Наименование работы:</p><textarea type="text" value="{{w.description}}" maxlength = "1000" name="description_work">{{w.description}}</textarea></div>
+        <div class="item-select-wrapper-big">
+        <div class="item-select-wrapper"><p>Выберите сотрудников:</p></div>
+            <select class="item-select" name="employee{{w.work_code}}" multiple size="3">
+                    {% for a in contract.employee_l %}
+                            {% if a in w.employee_code.all%}
+                                <option value="{{a.employee_code}}" selected>{{a.fio}}</option>
+                            {% else %}
+                               <option value="{{a.employee_code}}" >{{a.fio}}</option>
+                            {% endif %}
+                    {% endfor %}
+            </select>
+        </div>
+            <div class="item-select-wrapper"><p>Дата начала работы:</p><input class="item-input" type="datetime" value="{{w.work_start_date|date:"Y-m-d" }}"  name="work_start_date"></div>
+            <div class="item-select-wrapper"><p>Дата окончания работы:</p><input class="item-input" type="datetime" value="{{w.work_end_date|date:"Y-m-d"}}" name="work_end_date"> </div>
+            <div class="item-select-wrapper"><p>Состояние работы:</p>
+            <select class="item-select-short" name="work_status">
+                <option disabled>Выберите статус</option>
+                        {% if w.work_status == True %}
+                            <option value="True" selected >Выполнена</option>
+                            <option value="False" >Не выполнена</option>
+                        {% else %}
+                            <option value="True" >Выполнена</option>
+                            <option value="False" selected>Не выполнена</option>
+                        {% endif %}
+            </select>
+        </div>
+    </div>
+            {% endfor %}
+    {% else %}
+
+    {% endif %}
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

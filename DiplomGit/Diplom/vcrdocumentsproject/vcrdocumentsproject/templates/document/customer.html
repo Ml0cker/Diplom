@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование заказчика {{customer.organization_name}} {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:customer_save' customer.customer_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование заказчика</p>
+    <div class="item-select-wrapper"><p>Название организации: </p><input class="item-input" type="text" value="{{customer.organization_name}}" maxlength = "250" name="organization_name"> </div>
+        <div class="item-select-wrapper"><p>Адрес:</p><input class="item-input" type="text" value="{{customer.address}}" maxlength = "100" name="address"> </div>
+        <div class="item-select-wrapper"><p>Почтовый индекс:</p><input class="item-input" type="text" value="{{customer.post_index}}" maxlength = "6" name="post_index"> </div>
+         <div class="item-select-wrapper"><p>ИНН:</p><input class="item-input" type="text" type="text" value="{{customer.inn}}" maxlength = "10" name="inn"> </div>
+        <div class="item-select-wrapper"><p>КПП:</p><input class="item-input" type="text" value="{{customer.kpp}}" maxlength = "9" name="kpp"> </div>
+        <div class="item-select-wrapper"><p>Огрн:</p><input class="item-input" type="text" value="{{customer.ogrn}}" maxlength = "13" name="ogrn"> </div>
+        <div class="item-select-wrapper"><p>Р/счёт:</p><input class="item-input" type="text" value="{{customer.payment_account}}" maxlength = "20" name="payment_account"> </div>
+         <div class="item-select-wrapper"><p>К/счёт:</p><input class="item-input" type="text" value="{{customer.сorrespondent_bill}}" maxlength = "20" name="сorrespondent_bill"> </div>
+        <div class="item-select-wrapper"><p>БИК:</p><input class="item-input" type="text" value="{{customer.bik}}" maxlength = "9" name="bik"> </div>
+         <div class="item-select-wrapper"><p>ФИО представителя:</p><input class="item-input" type="text" value="{{customer.fio}}" maxlength = "100" name="fio"> </div>
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

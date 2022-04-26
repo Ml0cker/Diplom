@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование счета {{bills.bill.bill_number}} {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:bill_save' bills.bill.bill_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование счета</p>
+    <div class="item-select-wrapper"><p>По договору:</p>
+   <select class="item-select-short" name="contract_number">
+        <option disabled >Выберите договор</option>
+        {% for a in bills.contracts %}
+        {% if a == bills.bill.contract_number %}
+        <option value="{{a.contract_code}}" selected>{{a.contract_number}}</option>
+        {% else %}
+        <option value="{{a.contract_code}}" >{{a.contract_number}}</option>
+        {% endif %}
+        {% endfor %}
+    </select></div>
+    <div class="item-select-wrapper"><p>Номер счета: </p><input class="item-input" type="text" value="{{bills.bill.bill_number}}" maxlength = "5" name="bill_number"></div>
+
+    <div class="item-select-wrapper"><p>Дата счета:</p> <input class="item-input" type="datetime" value="{{bills.bill.bill_date|date:"Y-m-d"}}" name="bill_date"></div>
+
+     <div class="item-select-wrapper"><p>Оплата по счету:</p>
+    <select class="item-select-short" name="payment">
+
+        {% if bills.bill.payment == True %}
+        <option disabled  >Выберите статус</option>
+        <option value="True" selected>Оплачен</option>
+        <option value="False">Не оплачен</option>
+        {% elif bills.bill.payment == False  %}
+        <option disabled >Выберите статус</option>
+        <option value="True" >Оплачен</option>
+        <option value="False" selected>Не оплачен</option>
+        {% else %}
+        <option disabled selected >Выберите статус</option>
+        <option value="True" >Оплачен</option>
+        <option value="False" >Не оплачен</option>
+        {% endif %}
+    </select>
+     </div>
+
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

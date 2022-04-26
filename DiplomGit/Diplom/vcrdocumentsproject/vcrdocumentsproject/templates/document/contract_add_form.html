@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление договора {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:contract_add' %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Добавление договора</p>
+    <div class="item-select-wrapper"><p>Номер договора:</p><input class="item-input" type="text" value="" maxlength = "20" name="contract_number"></div>
+    <div class="item-select-wrapper"><p>Заказчик:</p>
+    <select class="item-select" name="customer">
+        <option disabled selected >Выберите заказчика</option>
+        {% if contract_add_form.customer_l %}
+
+            {% for a in contract_add_form.customer_l %}
+                {% if a.customer_code == contract_add_form.customer.customer_code %}
+                    <option value="{{a.customer_code}}" selected>{{a.organization_name}}</option>
+                {% else %}
+                    <option value="{{a.customer_code}}" >{{a.organization_name}}</option>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+
+    </select>
+        </div>
+    <div class="item-select-wrapper"><p>Исполнитель:</p>
+    <select class="item-select" name="executor">
+        <option disabled selected >Выберите исполнителя</option>
+        {% if contract_add_form.executor_l %}
+
+            {% for a in contract_add_form.executor_l %}
+                {% if a.executor_code == contract_add_form.executor.executor_code %}
+                    <option value="{{a.executor_code}}" selected>{{a.organization_name}}</option>
+                {% else %}
+                    <option value="{{a.executor_code}}" >{{a.organization_name}}</option>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            Исполнителей нет
+        {% endif %}
+
+    </select></div>
+    <div class="item-textarea-wrapper"><p>Наименование договора:</p> <textarea type="text" value="" maxlength = "1000" name="description"></textarea></div>
+    <div class="item-select-wrapper"><p>Дата заключения договора:</p> <input class="item-input" type="datetime" value=""  name="contract_date"></div>
+    <div class="item-select-wrapper"><p>Дата окончания действия:</p> <input class="item-input" type="datetime" value="" name="contract_end_date"></div>
+        <div class="item-select-wrapper"><p>Cумма:</p><input class="item-input"  type="text" value="" maxlength = "20" name="price"></div>
+    <div class="item-select-wrapper"><p>НДС:</p><select class="item-select-short" name="nds">
+        <option disabled selected >Выберите НДС</option>
+        {% for a in contract_add_form.nds_const %}
+        {% if contract_add_form.nds == a%}
+        <option value="{{a}}" selected>{{a}}%</option>
+        {% else %}
+        <option value="{{a}}">{{a}}%</option>
+        {% endif %}
+        {% endfor %}
+        </select></div>
+
+    <div class="button-wrapper"><button class="button-save" type="submit">Добавить</button></div>
+</form>
+</div>
+{% endblock %}

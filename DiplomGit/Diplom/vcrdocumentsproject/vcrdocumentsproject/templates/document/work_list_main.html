@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %} Работы{% endblock %}
+
+{% block content %}
+{% load static %}
+
+        <div class="content-container">
+            <p class="title">Работы</p>
+            <form action="{% url 'contract:work_list_search'  %}" method="POST">
+                {% csrf_token %}
+                <div class="item">
+                    <input placeholder="Поиск по работам" class="search" value="" type="text" name="search" required>
+                <button class="search-btn"  type="submit"><img class="search-img" src="{% static 'document/images/magnifier.png' %}"></button>
+            </div>
+            </form>
+
+            <a class="add-link" href="{% url 'contract:work_add_form' %}">Добавить работу<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+                 <div class="filters">
+        <a class="filter" href="{% url 'contract:work_list_filter' 'default' %}">Все работы</a>
+                <a class="filter" href="{% url 'contract:work_list_filter' 'actual' %}">Актуальные работы</a>
+                <a class="filter" href="{% url 'contract:work_list_filter' 'payment' %}">По актульным договорам</a>
+        </div>
+            <div class="basic-properties-wrapper">
+                <div class="prop-item">Наименование</div>
+                <div class="prop-item">Состояние</div>
+                <div class="prop-item">Крайний срок</div>
+                <div class="prop-item">Сотрудники</div>
+                <div class="prop-item">Договор</div>
+                <div class="prop-item">Оплата</div>
+            </div>
+
+             {% if works%}
+            {% for a in works.works %}
+                {% if works.filter == 'actual' %}
+                <form action="{% url 'contract:work_list_save_actual' a.work_code  %}" method="POST">
+                    {% elif works.filter == 'payment' %}
+                    <form action="{% url 'contract:work_list_save_payment' a.work_code  %}" method="POST">
+                    {% else %}
+                    <form action="{% url 'contract:work_list_save_default' a.work_code  %}" method="POST">
+                    {% endif %}
+                    {% csrf_token %}
+                    <div class="work">
+                        <a class="prop-item" href="{% url 'contract:work' a.work_code %}">{{a.description}}</a>
+                        <div class="prop-item">
+                            {% if a.work_status == True %}
+                            <button class="btn-cb"  type="submit"><input class="input-cb" type="checkbox" checked name="work_status"></button>
+                            {% else %}
+                            <button class="btn-cb"  type="submit"><input class="input-cb" type="checkbox" name="work_status"></button>
+                            {% endif %}
+
+                        </div>
+                        <div class="prop-item" >{{a.work_end_date}}</div>
+                        <div class="prop-item">
+
+                                {% if a.employee_code %}
+                                    {% for b in a.employee_code.all %}
+
+                                        {{b|truncatechars:10}} <br>
+
+                                    {% endfor %}
+                                {% else %}
+
+                                {% endif %}
+
+
+                        </div>
+                        <div class="prop-item" ><a href="{% url 'contract:contract' a.contract_number.contract_code %}">{{a.contract_number}}</a></div>
+
+                        <div class="prop-item">
+                            {% if a.contract_number.payment == True %}
+                            <button class="btn-cb"  type="submit"><input  class="input-cb" type="checkbox" checked name="payment"></button>
+                            {% else %}
+                            <button class="btn-cb"  type="submit"><input  class="input-cb" type="checkbox" name="payment"></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+             {% endfor %}
+
+                {% else %}
+                    Работ нет
+                {% endif %}
+
+        </div>
+
+
+{% endblock %}

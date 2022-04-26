@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление акта  {% endblock %}
+
+{% block content %}
+<div class="content-container">
+{% if contracts.filter == 'default' %}
+         <form action="{% url 'contract:act_add' contracts.filter %}" method="POST">
+    {% else %}
+        <form action="{% url 'contract:act_add' contracts.filter.contract_code %}" method="POST">
+        {% endif %}
+    {% csrf_token %}
+    <p class="title">Добавление акта</p>
+    <div class="item-select-wrapper"><p>По договору:</p>
+
+       {% if contracts.filter == 'default' %}
+        <select class="item-select-short" name="contract_number">
+        <option disabled selected>Выберите договор</option>
+        {% for a in contracts.contract_list %}
+        <option value="{{a.contract_code}}" >{{a.contract_number}}</option>
+        {% endfor %}
+       {% else %}
+       <input class="item-input" type="text" value="{{contracts.filter}}" disabled name="contract_number">
+       {% endif %}
+    </select>
+    </div>
+    <div class="item-select-wrapper"><p>Номер акта: </p><input class="item-input" type="text" value="" maxlength = "5" name="act_number"></div>
+
+    <div class="item-select-wrapper"><p>Дата акта:</p> <input class="item-input" type="datetime" value="" name="act_date"></div>
+
+
+
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

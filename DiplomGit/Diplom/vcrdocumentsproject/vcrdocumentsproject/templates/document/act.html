@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Редактирование акта {{acts.act.act_number}} {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:act_save' acts.act.act_code %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Редактирование акта</p>
+    <div class="item-select-wrapper"><p>По договору:</p>
+   <select class="item-select-short" name="contract_number">
+        <option disabled >Выберите договор</option>
+        {% for a in acts.contracts %}
+        {% if a == acts.act.contract_number %}
+        <option value="{{a.contract_code}}" selected>{{a.contract_number}}</option>
+        {% else %}
+        <option value="{{a.contract_code}}" >{{a.contract_number}}</option>
+        {% endif %}
+        {% endfor %}
+    </select></div>
+    <div class="item-select-wrapper"><p>Номер акта: </p><input class="item-input" type="text" value="{{acts.act.act_number}}" maxlength = "5" name="act_number"></div>
+
+    <div class="item-select-wrapper"><p>Дата акта:</p> <input class="item-input" type="datetime" value="{{acts.act.act_date|date:"Y-m-d"}}" name="act_date"></div>
+
+
+
+
+        <div class="button-wrapper"><button class="button-save" type="submit">Сохранить</button></div>
+</form>
+</div>
+{% endblock %}

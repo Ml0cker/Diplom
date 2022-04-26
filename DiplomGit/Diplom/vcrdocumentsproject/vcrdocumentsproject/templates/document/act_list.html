@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Акты {% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="content-container">
+    <p class="title">Акты</p>
+    <a class="add-link" href="{% url 'contract:act_add_form' act_list.filter %}">Добавить новый акт<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+    {% if act_list.acts %}
+
+        {% for a in act_list.acts %}
+        <div class="item">
+                    <a href="{% url 'contract:act' a.act_code %}">Акт № {{a.act_number}}, Договор: {{a.contract_number}}</a>
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+    {% endif %}
+    </div>
+{% endblock %}

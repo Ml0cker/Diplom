@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Счета{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="content-container">
+    <p class="title">Счета</p>
+    <a class="add-link" href="{% url 'contract:bill_add_form' bill_list.filter %}">Добавить новый счет<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+    {% if bill_list.bills %}
+
+        {% for a in bill_list.bills %}
+        <div class="item">
+                    <a href="{% url 'contract:bill' a.bill_code %}">Счет № {{a.bill_number}}, Договор: {{a.contract_number}}</a>
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+    {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление заказчика {% endblock %}
+
+{% block content %}
+<div class="content-container">
+<form action="{% url 'contract:customer_add' %}" method="POST">
+    {% csrf_token %}
+    <p class="title">Добавление заказчика</p>
+    <div class="item-select-wrapper"><p>Название организации:</p><input class="item-input" type="text" value="" maxlength = "250" name="organization_name"></div>
+    <div class="item-select-wrapper"><p>Адрес:</p><input class="item-input" type="text" value="" maxlength = "100" name="address"></div>
+    <div class="item-select-wrapper"><p>Почтовый индекс:</p><input class="item-input" type="text" value="" maxlength = "6" name="post_index"></div>
+    <div class="item-select-wrapper"><p>ИНН:</p><input class="item-input" type="text" value="" maxlength = "10" name="inn"></div>
+    <div class="item-select-wrapper"><p>КПП:</p><input class="item-input" type="text" value="" maxlength = "9" name="kpp"></div>
+    <div class="item-select-wrapper"><p>Огрн:</p><input class="item-input" type="text" value="" maxlength = "13" name="ogrn"></div>
+    <div class="item-select-wrapper"><p>Р/счёт:</p><input class="item-input" type="text" value="" maxlength = "20" name="payment_account"></div>
+    <div class="item-select-wrapper"><p>К/счёт:</p><input class="item-input" type="text" value="" maxlength = "20" name="сorrespondent_bill"></div>
+    <div class="item-select-wrapper"><p>БИК:</p><input class="item-input" type="text" value="" maxlength = "9" name="bik"></div>
+    <div class="item-select-wrapper"><p>ФИО представителя:</p><input class="item-input" type="text" value="" maxlength = "100" name="fio"></div>
+
+    <div class="button-wrapper"><button class="button-save" type="submit">Добавить</button></div>
+</form>
+</div>
+{% endblock %}

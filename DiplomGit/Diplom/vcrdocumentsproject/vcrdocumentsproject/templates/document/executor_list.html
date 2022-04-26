@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Исполнители{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="content-container">
+    <p class="title">Исполнители</p>
+<a class="add-link" href="{% url 'contract:executor_add_form' %}">Добавить нового исполнителя<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+    {% if executor_list %}
+
+        {% for a in executor_list %}
+            <a class="item"  href="{% url 'contract:executor' a.executor_code %}">{{a.organization_name}}</a>
+        {% endfor %}
+
+    {% else %}
+
+    {% endif %}
+    </div>
+{% endblock %}

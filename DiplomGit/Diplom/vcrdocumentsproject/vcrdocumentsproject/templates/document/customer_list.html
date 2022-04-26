@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Закзчики{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="content-container">
+    <p class="title">Заказчики</p>
+<a class="add-link" href="{% url 'contract:customer_add_form' %}">Добавить нового заказчика<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+    {% if customer_list %}
+
+        {% for a in customer_list %}
+            <a class="item" href="{% url 'contract:customer' a.customer_code %}">{{a.organization_name}}</a>
+        {% endfor %}
+
+    {% else %}
+    {% endif %}
+    </div>
+{% endblock %}

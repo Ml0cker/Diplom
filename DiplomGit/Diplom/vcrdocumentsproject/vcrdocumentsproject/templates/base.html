@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Работы{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'document/css/normalize.css' %}"/>
+<link rel="stylesheet" href="{% static 'document/css/style.css' %}"/>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        <a class="header-link" href="/">Работы</a>
+    <a class="header-link" href="{% url 'contract:contract_list' %}">Договоры</a>
+    <a class="header-link" href="{% url 'contract:customer_list' %}">Заказчики</a>
+    <a class="header-link" href="{% url 'contract:executor_list' %}">Исполнители</a>
+    <a class="header-link" href="{% url 'contract:employee_list' %}">Сотрудники</a>
+        <a class="header-link" href="{% url 'contract:bill_list' "default" %}">Все счета</a>
+    <a class="header-link" href="{% url 'contract:act_list' "default" %}">Все акты</a>
+    </div>
+    <div class="block-content">
+    {% block content %}
+
+    {% endblock %}
+    </div>
+</div>
+</body>
+</html>

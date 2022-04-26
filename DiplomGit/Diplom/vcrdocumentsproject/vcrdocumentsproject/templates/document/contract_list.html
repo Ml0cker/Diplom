@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} Договоры{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="content-container">
+
+    <p class="title">Договоры</p>
+    <form class="item" action="{% url 'contract:contract_list_search'  %}" method="POST">
+          {% csrf_token %}
+<input placeholder="Поиск по договорам" class="search" value="" type="text" name="search" required>
+                <button class="search-btn"  type="submit"><img class="search-img" src="{% static 'document/images/magnifier.png' %}"></button>
+    </form>
+
+    <a class="add-link" href="{% url 'contract:contract_add_form' %}">Добавить новый договор<img class="plus-img" src="{% static 'document/images/plus.png' %}"></a>
+    <div class="filters">
+<a class="filter" href="{% url 'contract:contract_list_filter' 'default' %}">Все договоры</a>
+<a class="filter" href="{% url 'contract:contract_list_filter' 'actual' %}">Актуальные договоры</a>
+</div>
+    {% if contract_list %}
+        {% for a in contract_list %}
+<div class="item">
+            <a href="{% url 'contract:contract' a.contract_code %}">Договор № {{a.contract_number}}, Заказчик: {{a.customer}}</a>
+            <a href="{% url 'contract:contract_print' a.contract_code %}"><img class="word-img" src="{% static 'document/images/wordLogo.png' %}"></a>
+</div>
+        {% endfor %}
+
+    {% else %}
+    {% endif %}
+    </div>
+{% endblock %}
